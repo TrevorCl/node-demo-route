@@ -1,0 +1,12 @@
+
+
+%macro frq(ds, tab, opt=list missing, opts=norow nocol nocum nopercent , out=);
+
+Title2 %bquote(&ds - &tab);
+  proc freq data=&ds;
+    table &tab / &opt &opts 
+     %if %bquote(&out)^=%str() %then out=&out;
+     ;
+  run;
+
+%mend;

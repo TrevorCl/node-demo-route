@@ -1,0 +1,35 @@
+
+
+
+%macro prnt(ds,vars=, obs=, whr=, firstobs=, opts=, st=, id=);
+  title %bquote(&ds);
+
+  %if &id ne %str() %then %do;
+     proc sort data=&ds out=___tmp;
+	 by &id;
+	 run;
+	 %let ds=___tmp;
+  %end;
+  proc print data=&ds
+   
+   %if &obs^=%str() or &firstobs^=%str() %then %do;
+    (
+     %if &obs^=%str() %then obs=&obs;
+     %if &firstobs^=%str() %then firstobs=&firstobs;
+    )
+   %end; &opts;
+   
+   %if &id ne %str() %then %do;
+    by &id;
+	id &id;
+   %end;
+    
+   &st;
+   
+     %if %bquote(&vars)^=%str() %then var &vars;;
+     %if %bquote(&whr)^=%str() %then where &whr;;
+  run;
+  title;
+
+%mend;
+
